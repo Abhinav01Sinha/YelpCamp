@@ -1,0 +1,85 @@
+<% layout('/layouts/boilerplate') -%>
+
+<div class="row">
+  <h1 class="text-center">Edit <%= found.title %></h1>
+  <div class="col-6 offset-3">
+    <div class="mb-2">
+      <form
+        method="POST"
+        action="/campgrounds/<%=found._id%>?_method=PUT"
+        novalidate
+        class="check-form"
+      >
+        <div class="col-12 mb-1">
+          <label for="title">Enter Title :</label>
+          <input
+            class="form-control"
+            type="text"
+            id="title"
+            name="Campground[title]"
+            value="<%= found.title %>"
+            required
+          />
+        </div>
+        <div class="col-12 mb-1">
+          <label for="location">Enter Location :</label>
+          <input
+            class="form-control"
+            type="text"
+            id="location"
+            name="Campground[location]"
+            value="<%= found.location %>"
+            required
+          />
+        </div>
+
+        <div class="col-12 mb-1">
+          <label for="location">Enter Image URL</label>
+          <input
+            class="form-control"
+            type="text"
+            id="location"
+            name="Campground[image]"
+            value="<%= found.image %>"
+            required
+          />
+        </div>
+
+        <div class="col-12 mb-3">
+          <label for="price">Enter price</label>
+          <div class="input-group mb-3">
+            <span class="input-group-text">$</span>
+            <input
+              type="Number"
+              class="form-control"
+              id="price"
+              name="Campground[price]"
+              value="<%= found.price %>"
+              placeholder="0.00"
+              required
+            />
+          </div>
+        </div>
+        <label for="floatingTextarea">Enter description</label>
+        <div class="col-12 mb-3 form-floating">
+          <textarea
+            class="form-control"
+            placeholder="Enter Description"
+            id="description"
+            name="Campground[description]"
+            rows="5"
+            required
+          >
+<%=found.description%>
+          </textarea>
+        </div>
+        <button class="btn btn-info">SAVE</button>
+        <br />
+      </form>
+    </div>
+
+    <button class="btn btn-dark">
+      <a href="/campgrounds/<%=found._id%>">CANCEL</a>
+    </button>
+  </div>
+</div>

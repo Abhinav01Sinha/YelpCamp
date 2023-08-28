@@ -1,0 +1,134 @@
+<% layout('/layouts/boilerplate') -%>
+
+<div class="row">
+  <div class="col-6">
+    <div class="card mb-3">
+      <img
+        style="height: 250px"
+        src="<%=found.image%>"
+        class="card-img-top"
+        alt="..."
+      />
+      <div class="card-body">
+        <h3 class="card-title"><%= found.title %></h3>
+        <p class="card-text"><%= found.description %></p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <b>The location is : </b> <%= found.location %>
+        </li>
+        <li class="list-group-item">
+          <b>Charges per Night is : </b> $<%= found.price %>
+        </li>
+
+        <li class="list-group-item">
+          <b>Author : </b> <%= found.author.username %>
+        </li>
+
+        <% if(currentUser && found.author.equals(currentUser._id)){ %>
+        <li class="list-group-item">
+          <button class="btn btn-primary">
+            <a style="color: white" href="/campgrounds/<%= found._id %>/edit"
+              >EDIT</a
+            >
+          </button>
+
+          <form
+            style="display: inline-block"
+            method="POST"
+            action="/campgrounds/<%=found._id%>?_method=DELETE"
+          >
+            <button class="btn btn-danger">DELETE CAMP</button>
+          </form>
+        </li>
+        <% } %>
+
+        <li class="list-group-item">
+          <button class="btn btn-dark">
+            <a style="color: white" href="/campgrounds">RETURN</a>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <% if(currentUser){ %>
+    <h3 class="mb-3">Leave A Review</h3>
+    <form
+      method="POST"
+      action="/campgrounds/<%=found._id%>/reviews"
+      novalidate
+      class="check-form mb-3"
+    >
+      <div class="mb-3">
+        <label class="form-label" for="rating"><h6>Rating :</h6></label>
+        <input
+          class="form-range"
+          type="range"
+          name="Review[rating]"
+          id="rating"
+          min="1"
+          max="5"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="body"><h6>Write A Review :</h6></label>
+        <textarea
+          class="form-control"
+          name="Review[body]"
+          id="body"
+          cols="30"
+          rows="4"
+          required
+        ></textarea>
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+
+      <button class="btn btn-success">SUBMIT</button>
+    </form>
+
+    <% } %>
+
+    <h4>REVIEWS :</h4>
+    <%for(let r of found.reviews){%>
+
+    <div class="card mb-2">
+      <div class="card-body">
+        <h5 class="card-text">Rating : <%=r.rating%></h5>
+
+        <div class="stars-wrapper">
+          <span>
+            <% for( let i = 0; i < r.rating; i++ ) { %>
+            <span class="star-filled">&#9733;</span>
+            <% } %>
+          </span>
+
+          <% for( let i = 0; i < 5 - r.rating; i++ ) { %>
+          <span class="star-empty">&#9734;</span>
+          <% } %>
+        </div>
+
+        <br />
+
+        <h6 class="card-subtitle mb-2 text-muted">
+          By : <%= r.author.username %>
+        </h6>
+
+        <p class="card-text">Review : <%=r.body%></p>
+
+        <% if(currentUser && r.author.equals(currentUser._id)){ %>
+        <form
+          method="POST"
+          action="/campgrounds/<%=found._id%>/reviews/<%=r._id%>?_method=DELETE"
+        >
+          <button class="btn btn-danger">DELETE</button>
+        </form>
+        <% } %>
+      </div>
+    </div>
+    <%}%>
+  </div>
+</div>
